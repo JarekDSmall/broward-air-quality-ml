@@ -6,12 +6,15 @@ A local research project developing next-day PM2.5 prediction for six air-monito
 
 Collected and audited 390 Florida DEP monthly reports through December 2025: 11,533 reported daily PM2.5 values across 11,874 station-days. Missing observations remain null. No forecasting model has been trained yet.
 
+EPA method verification and weather enrichment are complete: the modeling dataset now uses 11,553 method-checked EPA observations and eight ERA5 weather variables. The original DEP values remain a comparison source. See [data methods and limitations](DATA_METHODS.md), including corrected instrument data and retrospective weather availability.
+
 ## Reproduce the data audit
 
 Requires Python 3.10+; the collector and tests use only the standard library.
 
 ```powershell
 python scripts/collect_dep_pm25.py
+python scripts/enrich_broward_data.py
 python -m unittest discover -s tests -v
 ```
 
@@ -30,4 +33,4 @@ Verify monitor methods, attach weather data with explicit time alignment, then c
 
 Coverage is the presence of a reported number, not proof of regulatory validity or hourly completeness. PM2.5 method history, weather provenance, and data availability at forecast time must be documented before claiming operational forecast accuracy.
 
-This project grew out of my computer science coursework. Original course implementations and materials remain separate, ignored local references; this repository starts with the new public-data workflow. The repository has not been published.
+This project grew out of my computer science coursework. Original course implementations and materials remain separate, ignored local references; this repository starts with the new public-data workflow.
