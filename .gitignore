@@ -1,0 +1,40 @@
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Trained model files
+models/*.joblib
+
+# Temporary files
+*.tmp
+*.log
+
+models/*.joblib
+# Local capstone data and generated artifacts: review before publication
+/data/
+/reports/
+/models/
+/experiments/optimization/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+/experiments/course-pipeline/
+/PORTFOLIO_NOTES.md
