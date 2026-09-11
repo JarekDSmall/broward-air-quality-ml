@@ -39,7 +39,9 @@ Training rows pair features through day t with measured PM2.5 on calendar day t+
 
 Completed [error analysis and expanding-year evaluation](ERROR_ANALYSIS.md): all three regression candidates beat persistence in each of 2021–2024, but performance varies by station and season. The validation-selected model underpredicts the 113 high-concentration station-days in 2025 by 3.947 µg/m³ on average. This is a relative concentration group, not a health category. Full diagnostics and earlier-fold predictions are generated under `reports/error_analysis/`.
 
-Next: package the original validation-selected model with reproducible historical predictions and build a demo that includes persistence and clear peak-prediction limitations. Any choices informed by the 2025 results must treat that year as examined data and reserve a new holdout for final confirmation.
+The original validation-selected model is now packaged with a historical replay command and a local demo. See the [model card and commands](MODEL_CARD.md). Run `python scripts/historical_model.py package`, then `python scripts/export_demo.py`, and open `demo/dist/index.html`. The demo includes station/month filters, observed/model/persistence curves, average errors, daily values, and limitations. Its static historical data is included for immediate exploration; large raw archives and trained artifacts remain local.
+
+Any choices informed by the 2025 results must treat that year as examined data and reserve a new holdout for final confirmation. Next steps are automated repository checks and the public portfolio integration.
 
 Coverage is the presence of a reported number, not proof of regulatory validity or hourly completeness. PM2.5 method history, weather provenance, and data availability at forecast time must be documented before claiming operational forecast accuracy.
 
