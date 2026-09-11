@@ -20,6 +20,7 @@ python scripts/collect_dep_pm25.py
 python scripts/enrich_broward_data.py
 python scripts/build_training_data.py
 python scripts/compare_baselines.py
+python scripts/analyze_errors.py
 python -m unittest discover -s tests -v
 ```
 
@@ -36,7 +37,9 @@ See [the coverage audit](BROWARD_COVERAGE_AUDIT.md) and [source research](BROWAR
 
 Training rows pair features through day t with measured PM2.5 on calendar day t+1. Missing current readings or targets are excluded for fair persistence comparisons; older missing lags are imputed using training data only. The new Pompano station is evaluated separately because it has no pre-2025 training history. Local outputs include `data/training/next_day.jsonl`, its source-hash/count manifest, and `reports/baselines/` metrics and per-day predictions. Scripts print their results and regenerate the tracked results report.
 
-The next analysis is to examine seasonal and pollution-event errors and assess stability across earlier chronological folds. Any choices informed by the 2025 results must treat that year as examined data and reserve a new holdout for final confirmation.
+Completed [error analysis and expanding-year evaluation](ERROR_ANALYSIS.md): all three regression candidates beat persistence in each of 2021–2024, but performance varies by station and season. The validation-selected model underpredicts the 113 high-concentration station-days in 2025 by 3.947 µg/m³ on average. This is a relative concentration group, not a health category. Full diagnostics and earlier-fold predictions are generated under `reports/error_analysis/`.
+
+Next: package the original validation-selected model with reproducible historical predictions and build a demo that includes persistence and clear peak-prediction limitations. Any choices informed by the 2025 results must treat that year as examined data and reserve a new holdout for final confirmation.
 
 Coverage is the presence of a reported number, not proof of regulatory validity or hourly completeness. PM2.5 method history, weather provenance, and data availability at forecast time must be documented before claiming operational forecast accuracy.
 
