@@ -4,17 +4,22 @@ A local research project developing next-day PM2.5 prediction for six air-monito
 
 ## Current milestone
 
-Collected and audited 390 Florida DEP monthly reports through December 2025: 11,533 reported daily PM2.5 values across 11,874 station-days. Missing observations remain null. No forecasting model has been trained yet.
+Collected and audited 390 Florida DEP monthly reports through December 2025: 11,533 reported daily PM2.5 values across 11,874 station-days. Missing observations remain null.
 
 EPA method verification and weather enrichment are complete: the modeling dataset now uses 11,553 method-checked EPA observations and eight ERA5 weather variables. The original DEP values remain a comparison source. See [data methods and limitations](DATA_METHODS.md), including corrected instrument data and retrospective weather availability.
 
+Built 11,483 next-day examples and compared persistence, a seven-day mean, ridge regression and gradient boosting. Training uses 2019–2023, validation uses 2024 and testing uses 2025. The validation-selected boosting model reduced established-station test MAE from 1.466 to 1.433 µg/m³ (about 2.3%). Pollution-only ridge achieved 1.410; adding weather did not consistently help on the test year. See [full results and station-level comparisons](BASELINE_RESULTS.md). These are retrospective results, not operational forecasts.
+
 ## Reproduce the data audit
 
-Requires Python 3.10+; the collector and tests use only the standard library.
+Collection and enrichment use Python's standard library. Modeling and its tests require the pinned packages below; the complete workflow was verified with Python 3.14.4.
 
 ```powershell
+python -m pip install -r requirements.txt
 python scripts/collect_dep_pm25.py
 python scripts/enrich_broward_data.py
+python scripts/build_training_data.py
+python scripts/compare_baselines.py
 python -m unittest discover -s tests -v
 ```
 
@@ -27,9 +32,11 @@ The collector downloads source HTML, records retrieval timestamps and SHA256 has
 
 See [the coverage audit](BROWARD_COVERAGE_AUDIT.md) and [source research](BROWARD_DATA_SOURCES.md).
 
-## Forecasting plan
+## Training and evaluation
 
-Verify monitor methods, attach weather data with explicit time alignment, then compare a persistence baseline with regression models using chronological evaluation. The first target is a measured pollutant concentration at a station, not a synthetic health score.
+Training rows pair features through day t with measured PM2.5 on calendar day t+1. Missing current readings or targets are excluded for fair persistence comparisons; older missing lags are imputed using training data only. The new Pompano station is evaluated separately because it has no pre-2025 training history. Local outputs include `data/training/next_day.jsonl`, its source-hash/count manifest, and `reports/baselines/` metrics and per-day predictions. Scripts print their results and regenerate the tracked results report.
+
+The next analysis is to examine seasonal and pollution-event errors and assess stability across earlier chronological folds. Any choices informed by the 2025 results must treat that year as examined data and reserve a new holdout for final confirmation.
 
 Coverage is the presence of a reported number, not proof of regulatory validity or hourly completeness. PM2.5 method history, weather provenance, and data availability at forecast time must be documented before claiming operational forecast accuracy.
 

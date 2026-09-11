@@ -56,7 +56,7 @@ python scripts/enrich_broward_data.py
 python -m unittest discover -s tests -v
 ```
 
-All scripts use Python's standard library. Large source archives and generated data are ignored by Git. Relevant outputs:
+The collection and enrichment scripts use Python's standard library. Modeling dependencies are listed in `requirements.txt`. Large source archives and generated data are ignored by Git. Relevant outputs:
 
 - `data/epa/sites.json`, `monitors_pm25.json`: site coordinates and monitor metadata.
 - `data/epa/daily_broward_raw.jsonl`: 37,682 EPA summary rows before selection.
@@ -66,4 +66,4 @@ All scripts use Python's standard library. Large source archives and generated d
 - `data/analysis/station_days.jsonl`: complete station calendar, selected EPA PM2.5, DEP reference, and weather.
 - `data/analysis/enrichment_summary.json`: counts and method distributions.
 
-No model was trained and no accuracy claims have been made at this milestone.
+The subsequent training milestone is documented in [baseline results](BASELINE_RESULTS.md). Its calendar-aligned builder and comparison can be run with `python scripts/build_training_data.py` and `python scripts/compare_baselines.py` after installing `requirements.txt`.
